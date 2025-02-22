@@ -1,0 +1,52 @@
+.chat-bubble {
+    display: inline-block; /* Cambia a inline-block para que se ajuste al contenido */
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 70%; /* Ajusta el ancho máximo si es necesario */
+    color: black;
+    word-wrap: break-word; /* Para que las palabras largas se ajusten */
+}
+
+.chat-input-container{
+    position: absolute;
+    align-self: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    overflow-y: auto;
+}
+
+.chat-input{
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+.send-button{
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: #0084ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.chat-author {
+    font-size: 0.8em;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.chatbot {
+    float: left;
+    background-color: #e0e0e0;
+    text-align: left;
+}
+
+.user {
+    float: right;
+    background-color: #0084ff;
+    color: white;
+    text-align: right;
+}
