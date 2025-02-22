@@ -42,9 +42,19 @@ export class ChatComponent {
 
   }
 
+  refreshScroll(){
+    this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+  }
+
   sendMessage() {
     this.conversacion.push({author: 'User', content: this.message, timestamp: new Date()});
     this.message = '';
-    this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
+    this.simulateRespuesta();
+    this.refreshScroll();
+  }
+
+  simulateRespuesta(){
+    this.conversacion.push({author: 'ChatBot', content: 'Esto es una respuesta random para simular una respuesta de mi futuro bot', timestamp: new Date()});
+    this.refreshScroll();
   }
 }
