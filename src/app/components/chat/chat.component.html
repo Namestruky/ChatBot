@@ -10,5 +10,10 @@
 </section>
 <section class="">
     <input class="chat-input" type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()" placeholder="Escribe un mensaje...">
-    <button class="send-button" (click)="sendMessage()">Enviar</button>
+    <button class="send-button" (click)="sendMessage()" #sendButton [disabled]="true">Enviar</button>
+</section>
+<section class="info">
+    <div *ngIf="infoText" class="info-text">
+        {{infoText}}
+    </div>
 </section>

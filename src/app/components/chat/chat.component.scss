@@ -6,6 +6,7 @@
     max-width: 70%; /* Ajusta el ancho máximo si es necesario */
     color: black;
     word-wrap: break-word; /* Para que las palabras largas se ajusten */
+    max-height: fit-content;
 }
 
 .chat-container{
@@ -13,13 +14,22 @@
     flex-direction: column;
     border: 1px solid #ccc;
     height: 500px;
-    width: 250px;
+    width: 350px;
     justify-content: space-between;
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
     overflow-y: scroll;
     background-color: #ccc;
+}
+
+.info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: white;
+    font-size: .75em;
 }
 
 .chat-input-container{
@@ -31,6 +41,8 @@
 }
 
 .chat-input{
+    width: 78%;
+
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
@@ -44,6 +56,13 @@
     color: white;
     border: none;
     cursor: pointer;
+
+}
+
+.send-button:disabled{
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
 }
 
 .chat-author {
