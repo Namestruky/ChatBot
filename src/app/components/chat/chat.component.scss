@@ -8,6 +8,20 @@
     word-wrap: break-word; /* Para que las palabras largas se ajusten */
 }
 
+.chat-container{
+    display: grid;
+    flex-direction: column;
+    border: 1px solid #ccc;
+    height: 500px;
+    width: 250px;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    overflow-y: scroll;
+    background-color: #ccc;
+}
+
 .chat-input-container{
     position: absolute;
     align-self: flex-end;
