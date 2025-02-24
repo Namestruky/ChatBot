@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { CreateMLCEngine, MLCEngine } from "@mlc-ai/web-llm";
-import { max } from 'rxjs';
 
 const SELECTED_ENGINE = "Llama-3.2-1B-Instruct-q4f32_1-MLC";
 
@@ -19,7 +18,7 @@ const MODEL_CONFIG = {
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
-export class ChatComponent implements AfterViewInit{
+export class ChatComponent implements AfterViewInit {
 
   infoText: string = "";
   engine: MLCEngine | null = null;
@@ -30,13 +29,11 @@ export class ChatComponent implements AfterViewInit{
   message: string = '';
 
   constructor() {
-   
+
   }
   ngAfterViewInit(): void {
-    //this.testConversation();
     this.initMLCEngine();
   }
-
 
 
   /**
@@ -48,7 +45,7 @@ export class ChatComponent implements AfterViewInit{
   initMLCEngine() {
     const initProgressCallback = (progress: any) => {
       this.writeInfoText(`${progress.text}`);
-      if(progress.progress === 1) {
+      if (progress.progress === 1) {
         this.writeInfoText("Model loaded successfully!");
         this.sendButton.nativeElement.disabled = false
 
@@ -74,31 +71,36 @@ export class ChatComponent implements AfterViewInit{
     });
   }
 
+
+  /**
+   * Refresh the chat scroll to show the latest messages at the bottom
+   */
   refreshScroll() {
     this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
   }
 
-  sendMessage_old() {
-    this.conversacion.push({ author: 'User', content: this.message, timestamp: new Date() });
-    this.message = '';
-    this.simulateRespuesta();
-    this.refreshScroll();
-  }
 
+  /**
+   * Send a message to the chat
+   * This method is called when the user sends a message
+   * and sends the message to the MLC Engine to get a response.
+   * The response is then added to the conversation.
+   */
   async sendMessage() {
+    if (this.message === '') return;
 
-    if(this.message === '') return;
-    console.log("Sending message:");
+    //Add the user message to the conversation
     this.conversacion.push({ author: 'User', content: this.message, timestamp: new Date() });
-    //Se mapean los mensajes de la conversación a un formato que acepta el modelo
+
+    //Map the conversation to the format expected by the model
     const messages: any = this.conversacion.map((msg) => {
       return {
         content: msg.content,
         role: msg.author === 'User' ? 'user' : 'assistant'
-      }});
-    console.log("Messages:", messages);
+      }
+    });
 
-    //Se envía el mensaje al modelo
+    //Send all messages to the model and get the response
     const chunks = await this.engine?.chat.completions.create(
       {
         messages: messages,
@@ -106,54 +108,31 @@ export class ChatComponent implements AfterViewInit{
       }
     )
 
+    //Add a new empty message to the conversation
     let botMessageIndex = this.conversacion.push({ author: 'ChatBot', content: '', timestamp: new Date() })
 
+    //Each time the model sends a message, it is added to the new message
     if (chunks) {
       for await (const chunk of chunks) {
-        if(!(chunk.choices[0].finish_reason === "stop"))
+        if (!(chunk.choices[0].finish_reason === "stop"))
           this.conversacion[botMessageIndex - 1].content += chunk.choices[0].delta.content;
-        
+
         console.log(chunk.choices);
         this.refreshScroll();
       }
     }
-    
 
+    //Clear the input
     this.message = '';
   }
 
-  simulateRespuesta() {
-    this.conversacion.push({ author: 'ChatBot', content: 'Esto es una respuesta random para simular una respuesta de mi futuro bot', timestamp: new Date() });
-    this.refreshScroll();
-  }
-
-  testConversation() {
-    this.conversacion.push({
-      author: 'User',
-      content: 'Hola, necesito ayuda con mi pedido.',
-      timestamp: new Date()
-    });
-
-    this.conversacion.push({
-      author: 'ChatBot',
-      content: 'Claro, ¿puedes proporcionarme tu número de pedido?',
-      timestamp: new Date()
-    });
-
-    this.conversacion.push({
-      author: 'User',
-      content: 'Sí, es el 12345.',
-      timestamp: new Date()
-    });
-
-    this.conversacion.push({
-      author: 'ChatBot',
-      content: 'Gracias. Estoy verificando la información de tu pedido.',
-      timestamp: new Date()
-    });
-
-  }
-
+  /**
+   * Write an info text to the chat
+   * This method is called when the component needs to write an info text to the chat.
+   * The info text is shown to the user.
+   * @param text The text to write to the chat
+   * @returns void
+   */
   writeInfoText(text: string) {
     this.infoText = text;
   }
